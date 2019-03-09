@@ -1,0 +1,69 @@
+#include<iostream>
+#include<string.h>
+
+using namespace std;
+
+struct node
+{
+	string url;
+	node *next;
+} *top;
+
+void create(string);
+void pop();
+
+int main()
+{
+	top=NULL;
+	int ch;
+	while(1)
+	{
+		cout<<"1.Enter new URL \n2.Go back\n";
+		cin>>ch;
+		string str;
+		switch(ch)
+		{
+			case 1:
+			 cout<<"Enter the URL:";
+			 cin>>str;
+			 create(str);
+			 cout<<"Welcome to "<<str<<endl;
+			 break;
+			case 2:
+			 pop();
+			 break;
+			default:
+			 cout<<"Invalid choice";
+		}
+    }
+    return 0;
+}
+
+void create(string str)
+{
+	node *ptr=new node;
+	ptr->url=str;
+	if(top==NULL)
+	{
+		top=ptr;
+		top->next=NULL;
+	}
+	else
+	{
+		ptr->next=top;
+		top=ptr;
+	}
+}
+
+void pop()
+{
+	if(top==NULL||((top->next)==NULL))
+	{
+	 cout<<"Thank you";	
+	 exit(0);
+    } 
+	node *nptr=top;
+	top=top->next;
+	cout<<"Welcome to "<<top->url<<endl;
+	delete nptr;
+}
