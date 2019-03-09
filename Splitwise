@@ -1,0 +1,115 @@
+#include<iostream>
+#include<string>
+#include<limits.h>
+
+using namespace std;
+
+struct info{
+	int m;
+	string name;
+};
+
+void sort(info[], int);
+void sortf(info[], int);
+void sortb(info[], int);
+
+int main()
+{
+	int n;
+	cout<<"Enter the number of friends:";
+	cin>>n;
+	if(n<2)
+	 exit(0);
+	info a[n+1];
+	for(int i=1;i<n+1;i++)
+	{
+	  cout<<"Enter the name of friend "<<i<<":";
+	  cin>>a[i].name;
+	  a[i].m=0;
+	  for(int j=i-1;j>=1;j--)
+	  {
+	  	int k;
+	  	cout<<"How much should "<<a[i].name<<" pay "<<a[j].name<<"?"<<endl;  //If a[j] has to pay a[i], the user is expected to enter a negative value.
+	  	cin>>k;
+	  	a[j].m=a[j].m+k;
+	  	a[i].m=a[i].m-k;
+	  }
+	}
+	sort(a,n+1);
+	while(n)
+	{
+		if(a[1].m+a[n].m==0)
+		{
+			cout<<a[1].name<<" pays Rs."<<a[n].m<<" to "<<a[n].name<<endl;
+			for(int i=1;i<n;i++)
+			 a[i]=a[i+1];
+			n-=2;
+		}
+		else if(a[1].m+a[n].m<0)
+		{
+			cout<<a[1].name<<" pays Rs."<<a[n].m<<" to "<<a[n].name<<endl;
+			a[1].m=a[1].m+a[n].m;
+			n--;
+			if(a[1].m>a[2].m)
+			 sortf(a,n+1);
+		}
+		else
+		{
+			cout<<a[1].name<<" pays Rs."<<a[1].m<<" to "<<a[n].name<<endl;
+			a[n].m=a[n].m+a[1].m;
+			for(int i=1;i<n;i++)
+			 a[i]=a[i+1];
+			n--;
+			if(a[n-1].m>a[n].m)
+			 sortb(a,n+1);
+		}
+	}
+	return 0;
+}
+
+void sort(info arr[], int n)
+{
+	int j;
+	info tmp;
+	arr[0].m=INT_MIN;
+	for(int i=1;i<n;i++)
+	{
+		tmp=arr[i];
+		j=i-1;
+		while(tmp.m<arr[j].m)
+		{
+			arr[j+1]=arr[j];
+			j--;
+		}
+		arr[j+1]=tmp;
+	}
+}
+
+void sortf(info arr[], int n)
+{
+	info tmp=arr[1];
+	for(int i=2;i<n-1;i++)
+	{
+		arr[i-1]=arr[i];
+		if(tmp.m<=arr[i+1].m)
+		{
+		  arr[i]=tmp;
+		  break;
+	    }
+	}
+}
+
+void sortb(info arr[], int n)
+{
+	info tmp=arr[n-1];
+	for(int i=n-2;i>0;i--)
+	{
+		arr[i+1]=arr[i];
+		if(tmp.m>=arr[i-1].m)
+		{
+			arr[i]=tmp;
+			break;
+		}
+	}
+}
+
